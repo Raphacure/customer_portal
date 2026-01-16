@@ -1,19 +1,26 @@
 # Second Brain: RaphaCure Customer Portal
 
 ## 🎯 Current Focus
-- implementing deep linking configuration for Android and iOS.
+- Implementing the homepage with a design inspired by `raphacure.com`.
 
 ## ✅ Project Checklist
+- [x] Install `shadcn/ui` components: `Button`, `Card`, `Input`, `Separator`.
+- [x] Implement `app/page.tsx` with Hero, Services, and Corporate Wellness sections.
+- [x] Update `app/layout.tsx` metadata and styles.
 - [x] Place `assetlinks.json` in `public/.well-known/`.
 - [x] Place `apple-app-site-association` in `public/.well-known/`.
 - [x] Configure `next.config.ts` to serve `apple-app-site-association` as `application/json`.
 
 ## 📝 To-Do List (Next Actions)
-- [ ] Verify deep linking on actual devices (requires deployment).
+- [ ] Implement actual navigation and routing.
+- [ ] Create detailed service pages.
+- [ ] Connect to backend for real data.
 
 ## 🐞 Known Issues / Refactors
 - None currently.
 
 ## 🏛️ Architectural Decisions
-- Used `public/.well-known` for hosting verification files.
-- Configured headers in `next.config.ts` to ensure correct Content-Type for Apple's verification file.
+- Used `shadcn/ui` for UI components.
+- Used `lucide-react` for icons.
+- Used Tailwind CSS for styling and responsiveness.
+- Implemented `app/page.tsx` as a Server Component (default).
