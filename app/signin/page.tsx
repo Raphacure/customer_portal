@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { GoogleLoginButton } from "@/components/auth/google-login-button";
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { API_KEY, GOOGLE_CLIENT_ID, SERVER_IP } from "@/lib/config";
 
-export default function SignInPage() {
+function SignInPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/site";
@@ -110,7 +110,7 @@ export default function SignInPage() {
             "x-frontend": "raphacure",
           },
           body: JSON.stringify(body),
-        },
+        }
       );
 
       const data = await response.json();
@@ -158,7 +158,7 @@ export default function SignInPage() {
               "x-frontend": "raphacure",
             },
             body: JSON.stringify(body),
-          },
+          }
         );
 
         const data = await response.json();
@@ -183,7 +183,7 @@ export default function SignInPage() {
         setIsLoading(false);
       }
     },
-    [phoneOrEmail, login, router, isNewUser],
+    [phoneOrEmail, login, router, isNewUser]
   );
 
   const handleOtpChange = (value: string) => {
@@ -584,5 +584,19 @@ export default function SignInPage() {
         </Card>
       </div>
     </GoogleOAuthProvider>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <SignInPageContent />
+    </Suspense>
   );
 }
