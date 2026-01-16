@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowRight, Smartphone, User, LogOut } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -17,9 +18,12 @@ import { SERVER_IP, API_KEY } from "@/lib/config";
 
 export default function DeepLinkPage() {
   const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
+  const pathname = usePathname();
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
+  const [hasNavigatedToPath, setHasNavigatedToPath] = useState(false);
 
   // Call signinasuserwithjwt API when page renders with authenticated user
   useEffect(() => {
@@ -67,6 +71,31 @@ export default function DeepLinkPage() {
       signInWithJWT();
     }
   }, [isAuthenticated, user]);
+
+  // After iframe SSO loads, wait 1.5s then navigate to the current pathname
+  useEffect(() => {
+    if (isIframeLoaded && iframeUrl && !hasNavigatedToPath && pathname) {
+      const timer = setTimeout(() => {
+        try {
+          // Extract the base domain from the SSO URL
+          const ssoUrl = new URL(iframeUrl);
+          const baseDomain = `${ssoUrl.protocol}//${ssoUrl.host}`;
+
+          // Construct the new URL with the current pathname
+          const newUrl = `${baseDomain}${pathname}`;
+          console.log("Navigating iframe to:", newUrl);
+
+          // Update the iframe src
+          setIframeUrl(newUrl);
+          setHasNavigatedToPath(true);
+        } catch (error) {
+          console.error("Error navigating iframe:", error);
+        }
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isIframeLoaded, iframeUrl, hasNavigatedToPath, pathname]);
 
   const handleLogout = () => {
     logout();
@@ -122,6 +151,7 @@ export default function DeepLinkPage() {
           </div>
         )}
         <iframe
+          ref={iframeRef}
           src={iframeUrl}
           className="w-full h-full border-0"
           onLoad={handleIframeLoad}
