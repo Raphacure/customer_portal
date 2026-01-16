@@ -164,9 +164,9 @@ export default function SignInPage() {
 
           // Redirect to profile if new user, otherwise home
           if (isNewUser || !data.data.first_name) {
-            router.push("/site?newUser=true");
+            window.location.href = "/site?newUser=true";
           } else {
-            router.push("/site");
+            window.location.href = "/site";
           }
         } else {
           setOtpError("Incorrect OTP. Please try again.");
@@ -197,7 +197,7 @@ export default function SignInPage() {
   const isDisabled = phoneOrEmail.length < 6 || !termsAccepted;
 
   const handleLoginSuccess = () => {
-    router.push("/site");
+    window.location.href = "/site";
   };
 
   const handleLoginError = (errorMsg: string) => {
