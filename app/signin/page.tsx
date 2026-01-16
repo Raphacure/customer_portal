@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import {
@@ -35,6 +35,8 @@ import {
 
 export default function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect") || "/site";
   const {
     user,
     isAuthenticated,
@@ -105,7 +107,7 @@ export default function SignInPage() {
           headers: {
             "Content-Type": "application/json",
             "x-api-key": API_KEY,
-            "x-frontend": "raphacure"
+            "x-frontend": "raphacure",
           },
           body: JSON.stringify(body),
         }
@@ -146,15 +148,18 @@ export default function SignInPage() {
             ? { phone: phoneOrEmail.replace(/\D/g, ""), otp: otpValue }
             : { email: phoneOrEmail.toLowerCase(), otp: otpValue };
 
-        const response = await fetch(`${SERVER_IP}/api/v1/auth/otp/verify?marketplace_name=raphacure`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": API_KEY,
-            "x-frontend": "raphacure"
-          },
-          body: JSON.stringify(body),
-        });
+        const response = await fetch(
+          `${SERVER_IP}/api/v1/auth/otp/verify?marketplace_name=raphacure`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": API_KEY,
+              "x-frontend": "raphacure",
+            },
+            body: JSON.stringify(body),
+          }
+        );
 
         const data = await response.json();
 
@@ -164,9 +169,9 @@ export default function SignInPage() {
 
           // Redirect to profile if new user, otherwise home
           if (isNewUser || !data.data.first_name) {
-            handleLoginSuccess()
+            handleLoginSuccess();
           } else {
-            handleLoginSuccess()
+            handleLoginSuccess();
           }
         } else {
           setOtpError("Incorrect OTP. Please try again.");
@@ -197,7 +202,8 @@ export default function SignInPage() {
   const isDisabled = phoneOrEmail.length < 6 || !termsAccepted;
 
   const handleLoginSuccess = () => {
-    window.location.href = "/site";
+    // Redirect to the original path the user was trying to access, or /site
+    window.location.href = redirectPath;
   };
 
   const handleLoginError = (errorMsg: string) => {
