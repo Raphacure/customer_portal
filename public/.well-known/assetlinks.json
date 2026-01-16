@@ -1,0 +1,24 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.cognonta.raphacure",
+      "sha256_cert_fingerprints": [
+        "E3:C1:85:95:E0:88:AD:EB:D4:5D:8B:D6:F6:29:9B:8E:2C:39:CA:73:8A:C6:9C:8B:F6:77:DC:09:8E:FE:5F:26",
+        "6F:38:86:A0:D0:E0:51:98:D4:8A:76:01:2F:8B:95:58:98:E3:3A:CE:08:4C:6A:4E:8E:88:1F:45:63:58:B0:D8"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.rcure.app",
+      "sha256_cert_fingerprints": [
+        "E3:C1:85:95:E0:88:AD:EB:D4:5D:8B:D6:F6:29:9B:8E:2C:39:CA:73:8A:C6:9C:8B:F6:77:DC:09:8E:FE:5F:26",
+        "6F:38:86:A0:D0:E0:51:98:D4:8A:76:01:2F:8B:95:58:98:E3:3A:CE:08:4C:6A:4E:8E:88:1F:45:63:58:B0:D8"
+      ]
+    }
+  }
+]

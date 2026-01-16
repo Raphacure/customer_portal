@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "RF4X369C9P.com.cognonta.raphacure",
+        "paths": [ "*" ]
+      },
+      {
+        "appID": "RF4X369C9P.com.rcure.app",
+        "paths": [ "*" ]
+      }
+    ]
+  }
+}
