@@ -1,12 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import type React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
-  type UserData,
+  clearAuthData,
   getAuthToken,
   getUser,
   setAuthData,
-  clearAuthData,
+  type UserData,
 } from "@/lib/auth";
 
 interface AuthContextType {

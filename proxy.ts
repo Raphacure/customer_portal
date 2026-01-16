@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const AUTH_TOKEN_KEY = "raphacure_auth_token";
 
@@ -30,7 +30,7 @@ export function proxy(request: NextRequest) {
 
   // Check if trying to access protected route without auth
   const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   if (isProtectedRoute && !isAuthenticated) {

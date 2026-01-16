@@ -1,18 +1,21 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+  ArrowLeft,
+  ArrowRight,
+  Loader2,
+  LogOut,
+  Mail,
+  Smartphone,
+  User,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "@/components/auth/auth-provider";
+import { GoogleLoginButton } from "@/components/auth/google-login-button";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -20,18 +23,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GoogleLoginButton } from "@/components/auth/google-login-button";
-import { useAuth } from "@/components/auth/auth-provider";
-import { SERVER_IP, API_KEY, GOOGLE_CLIENT_ID } from "@/lib/config";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import {
-  Loader2,
-  ArrowLeft,
-  Smartphone,
-  Mail,
-  User,
-  LogOut,
-  ArrowRight,
-} from "lucide-react";
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { Label } from "@/components/ui/label";
+import { API_KEY, GOOGLE_CLIENT_ID, SERVER_IP } from "@/lib/config";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -110,7 +110,7 @@ export default function SignInPage() {
             "x-frontend": "raphacure",
           },
           body: JSON.stringify(body),
-        }
+        },
       );
 
       const data = await response.json();
@@ -158,7 +158,7 @@ export default function SignInPage() {
               "x-frontend": "raphacure",
             },
             body: JSON.stringify(body),
-          }
+          },
         );
 
         const data = await response.json();
@@ -183,7 +183,7 @@ export default function SignInPage() {
         setIsLoading(false);
       }
     },
-    [phoneOrEmail, login, router, isNewUser]
+    [phoneOrEmail, login, router, isNewUser],
   );
 
   const handleOtpChange = (value: string) => {

@@ -1,11 +1,11 @@
 "use client";
 
 import { useGoogleLogin } from "@react-oauth/google";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { SERVER_IP, API_KEY } from "@/lib/config";
+import { API_KEY, SERVER_IP } from "@/lib/config";
 import { useAuth } from "./auth-provider";
-import { Loader2 } from "lucide-react";
 
 interface GoogleLoginButtonProps {
   onSuccess?: () => void;
@@ -31,7 +31,7 @@ export function GoogleLoginButton({
               Authorization: `Bearer ${codeResponse.access_token}`,
               Accept: "application/json",
             },
-          }
+          },
         );
         const profile = await userInfoResponse.json();
 
@@ -49,15 +49,18 @@ export function GoogleLoginButton({
             profileImage: profile.picture,
           };
 
-          const response = await fetch(`${SERVER_IP}/api/v1/auth/google?marketplace_name=raphacure`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-api-key": API_KEY,
-              "x-frontend": "raphacure"
+          const response = await fetch(
+            `${SERVER_IP}/api/v1/auth/google?marketplace_name=raphacure`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-api-key": API_KEY,
+                "x-frontend": "raphacure",
+              },
+              body: JSON.stringify(body),
             },
-            body: JSON.stringify(body),
-          });
+          );
 
           const data = await response.json();
 

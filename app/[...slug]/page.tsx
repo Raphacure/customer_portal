@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { usePathname } from "next/navigation";
-import { ArrowRight, Smartphone, User, LogOut } from "lucide-react";
+import { ArrowRight, LogOut, Smartphone, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,8 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuth } from "@/components/auth/auth-provider";
-import { SERVER_IP, API_KEY } from "@/lib/config";
+import { API_KEY, SERVER_IP } from "@/lib/config";
 
 export default function DeepLinkPage() {
   const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
@@ -50,7 +50,7 @@ export default function DeepLinkPage() {
               Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({}),
-          }
+          },
         );
 
         const data = await response.json();
