@@ -97,6 +97,13 @@ export default function DeepLinkPage() {
     }
   }, [isIframeLoaded, iframeUrl, hasNavigatedToPath, pathname]);
 
+  // Redirect unauthenticated users to signin with redirect param
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated && pathname) {
+      window.location.href = `/signin?redirect=${encodeURIComponent(pathname)}`;
+    }
+  }, [authLoading, isAuthenticated, pathname]);
+
   const handleLogout = () => {
     logout();
   };
