@@ -1,4 +1,6 @@
-import { ArrowRight, Smartphone } from "lucide-react";
+"use client";
+
+import { ArrowRight, Smartphone, User, LogOut } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,14 +10,94 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAuth } from "@/components/auth/auth-provider";
 
 export default function DeepLinkPage() {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4 text-center dark:bg-slate-950">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl" />
         <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl" />
       </div>
+
+      {/* User Info Card - Show when authenticated */}
+      {isAuthenticated && user && (
+        <Card className="relative w-full max-w-md border-slate-200 shadow-xl dark:border-slate-800 mb-6">
+          <CardHeader className="space-y-4 pb-4">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 overflow-hidden">
+              {user.profileImage ? (
+                <img
+                  src={user.profileImage}
+                  alt="Profile"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <User className="h-10 w-10 text-green-600 dark:text-green-400" />
+              )}
+            </div>
+            <div className="space-y-2">
+              <CardTitle className="text-2xl font-bold tracking-tight">
+                Welcome back!
+              </CardTitle>
+              <CardDescription className="text-base">
+                You are signed in as
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="rounded-lg bg-slate-100 p-4 text-left dark:bg-slate-900">
+              <div className="space-y-2">
+                {(user.first_name || user.last_name) && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                      Name:
+                    </span>
+                    <span className="font-medium text-slate-900 dark:text-slate-100">
+                      {[user.first_name, user.last_name]
+                        .filter(Boolean)
+                        .join(" ")}
+                    </span>
+                  </div>
+                )}
+                {user.email && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                      Email:
+                    </span>
+                    <span className="font-medium text-slate-900 dark:text-slate-100">
+                      {user.email}
+                    </span>
+                  </div>
+                )}
+                {user.phone && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-slate-500 dark:text-slate-400">
+                      Phone:
+                    </span>
+                    <span className="font-medium text-slate-900 dark:text-slate-100">
+                      +91 {user.phone}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="w-full text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 dark:border-red-900 dark:hover:bg-red-950"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="relative w-full max-w-md border-slate-200 shadow-xl dark:border-slate-800">
         <CardHeader className="space-y-4 pb-4">
@@ -107,15 +189,28 @@ export default function DeepLinkPage() {
             </div>
           </div>
 
-          <Button
-            asChild
-            variant="ghost"
-            className="w-full text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400"
-          >
-            <Link href="/" className="flex items-center gap-2">
-              Go to Homepage <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-col gap-2">
+            {!isAuthenticated && (
+              <Button
+                asChild
+                variant="default"
+                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+              >
+                <Link href="/signin" className="flex items-center gap-2">
+                  Sign In <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
+            <Button
+              asChild
+              variant="ghost"
+              className="w-full text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400"
+            >
+              <Link href="/" className="flex items-center gap-2">
+                Go to Homepage <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
