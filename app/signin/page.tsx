@@ -164,9 +164,9 @@ export default function SignInPage() {
 
           // Redirect to profile if new user, otherwise home
           if (isNewUser || !data.data.first_name) {
-            window.location.href = "/site?newUser=true";
+            handleLoginSuccess()
           } else {
-            window.location.href = "/site";
+            handleLoginSuccess()
           }
         } else {
           setOtpError("Incorrect OTP. Please try again.");
