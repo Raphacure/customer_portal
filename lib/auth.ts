@@ -10,11 +10,15 @@ export interface UserData {
   email?: string;
   phone?: string;
   profileImage?: string;
+  accessToken?: string;
+  token?: string;
   roles?: Array<{
     role: string;
     name?: string;
     client?: { name: string };
   }>;
+  // Allow any additional fields from API response
+  [key: string]: unknown;
 }
 
 export interface AuthData {

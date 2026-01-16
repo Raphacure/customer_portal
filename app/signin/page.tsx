@@ -105,6 +105,7 @@ export default function SignInPage() {
           headers: {
             "Content-Type": "application/json",
             "x-api-key": API_KEY,
+            "x-frontend": "raphacure"
           },
           body: JSON.stringify(body),
         }
@@ -145,11 +146,12 @@ export default function SignInPage() {
             ? { phone: phoneOrEmail.replace(/\D/g, ""), otp: otpValue }
             : { email: phoneOrEmail.toLowerCase(), otp: otpValue };
 
-        const response = await fetch(`${SERVER_IP}/api/v1/auth/otp/verify`, {
+        const response = await fetch(`${SERVER_IP}/api/v1/auth/otp/verify?marketplace_name=raphacure`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-api-key": API_KEY,
+            "x-frontend": "raphacure"
           },
           body: JSON.stringify(body),
         });
@@ -162,9 +164,9 @@ export default function SignInPage() {
 
           // Redirect to profile if new user, otherwise home
           if (isNewUser || !data.data.first_name) {
-            router.push("/?newUser=true");
+            router.push("/site?newUser=true");
           } else {
-            router.push("/");
+            router.push("/site");
           }
         } else {
           setOtpError("Incorrect OTP. Please try again.");
@@ -195,7 +197,7 @@ export default function SignInPage() {
   const isDisabled = phoneOrEmail.length < 6 || !termsAccepted;
 
   const handleLoginSuccess = () => {
-    router.push("/");
+    router.push("/site");
   };
 
   const handleLoginError = (errorMsg: string) => {

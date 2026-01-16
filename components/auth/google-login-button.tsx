@@ -49,11 +49,12 @@ export function GoogleLoginButton({
             profileImage: profile.picture,
           };
 
-          const response = await fetch(`${SERVER_IP}/api/v1/auth/google`, {
+          const response = await fetch(`${SERVER_IP}/api/v1/auth/google?marketplace_name=raphacure`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               "x-api-key": API_KEY,
+              "x-frontend": "raphacure"
             },
             body: JSON.stringify(body),
           });

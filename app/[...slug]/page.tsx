@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ArrowRight, Smartphone, User, LogOut } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -10,15 +11,128 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/components/auth/auth-provider";
+import { SERVER_IP, API_KEY } from "@/lib/config";
 
 export default function DeepLinkPage() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
+  const [iframeUrl, setIframeUrl] = useState<string | null>(null);
+  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
+  const [isIframeLoaded, setIsIframeLoaded] = useState(false);
+
+  // Call signinasuserwithjwt API when page renders with authenticated user
+  useEffect(() => {
+    const signInWithJWT = async () => {
+      // Get accessToken from user data stored in localStorage
+      const accessToken = user?.accessToken || user?.token;
+
+      if (!accessToken) {
+        console.log("No accessToken found in user data");
+        return;
+      }
+
+      setIsLoadingUrl(true);
+
+      try {
+        const response = await fetch(
+          `${SERVER_IP}/api/v1/auth/signinasuserwithjwt?marketplace_name=raphacure`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": API_KEY,
+              "x-frontend": "raphacure",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({}),
+          }
+        );
+
+        const data = await response.json();
+        console.log("signinasuserwithjwt API response:", data);
+
+        // Set the iframe URL from the response
+        if (data?.data?.url) {
+          setIframeUrl(data.data.url);
+        }
+      } catch (error) {
+        console.error("signinasuserwithjwt API error:", error);
+      } finally {
+        setIsLoadingUrl(false);
+      }
+    };
+
+    if (isAuthenticated && user) {
+      signInWithJWT();
+    }
+  }, [isAuthenticated, user]);
 
   const handleLogout = () => {
     logout();
   };
 
+  const handleIframeLoad = () => {
+    setIsIframeLoaded(true);
+  };
+
+  // Show loading skeleton while auth is loading or URL is being fetched
+  if (authLoading || (isAuthenticated && isLoadingUrl)) {
+    return (
+      <div className="fixed inset-0 w-screen h-screen bg-background">
+        <div className="w-full h-full flex flex-col">
+          {/* Header skeleton */}
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center gap-4">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-3 w-24" />
+              </div>
+            </div>
+          </div>
+          {/* Main content skeleton */}
+          <div className="flex-1 p-4">
+            <Skeleton className="w-full h-full rounded-lg" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show iframe if URL is available (for authenticated users)
+  if (isAuthenticated && iframeUrl) {
+    return (
+      <div className="fixed inset-0 w-screen h-screen bg-background">
+        {/* Show skeleton while iframe is loading */}
+        {!isIframeLoaded && (
+          <div className="absolute inset-0 w-full h-full flex flex-col z-10">
+            <div className="p-4 border-b border-border bg-background">
+              <div className="flex items-center gap-4">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-3 w-24" />
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 p-4 bg-background">
+              <Skeleton className="w-full h-full rounded-lg" />
+            </div>
+          </div>
+        )}
+        <iframe
+          src={iframeUrl}
+          className="w-full h-full border-0"
+          onLoad={handleIframeLoad}
+          title="RaphaCure App"
+          allow="geolocation; microphone; camera; payment"
+        />
+      </div>
+    );
+  }
+
+  // Default view for non-authenticated users or when no URL
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4 text-center dark:bg-slate-950">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -26,14 +140,14 @@ export default function DeepLinkPage() {
         <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl" />
       </div>
 
-      {/* User Info Card - Show when authenticated */}
-      {isAuthenticated && user && (
+      {/* User Info Card - Show when authenticated but no iframe URL */}
+      {isAuthenticated && user && !iframeUrl && (
         <Card className="relative w-full max-w-md border-slate-200 shadow-xl dark:border-slate-800 mb-6">
           <CardHeader className="space-y-4 pb-4">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 overflow-hidden">
               {user.profileImage ? (
                 <img
-                  src={user.profileImage}
+                  src={user.profileImage as string}
                   alt="Profile"
                   className="h-full w-full object-cover"
                 />
@@ -71,7 +185,7 @@ export default function DeepLinkPage() {
                       Email:
                     </span>
                     <span className="font-medium text-slate-900 dark:text-slate-100">
-                      {user.email}
+                      {user.email as string}
                     </span>
                   </div>
                 )}
@@ -81,7 +195,7 @@ export default function DeepLinkPage() {
                       Phone:
                     </span>
                     <span className="font-medium text-slate-900 dark:text-slate-100">
-                      +91 {user.phone}
+                      +91 {user.phone as string}
                     </span>
                   </div>
                 )}
