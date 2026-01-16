@@ -1,12 +1,3 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   Activity,
   Ambulance,
@@ -19,6 +10,15 @@ import {
   Search,
   Stethoscope,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   return (
@@ -32,7 +32,9 @@ export default function Home() {
                 Healthcare that comes to you
               </h1>
               <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                Experience the future of healthcare with RaphaCure. From teleconsultations to home diagnostics, we bring quality care to your doorstep.
+                Experience the future of healthcare with RaphaCure. From
+                teleconsultations to home diagnostics, we bring quality care to
+                your doorstep.
               </p>
             </div>
             <div className="w-full max-w-sm space-y-2">
@@ -58,7 +60,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
+
         {/* Background decoration */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-20 dark:opacity-10 pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-400 blur-[100px]" />
@@ -77,10 +79,13 @@ export default function Home() {
               Comprehensive healthcare solutions designed around your needs.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service) => (
-              <Card key={service.title} className="group hover:shadow-lg transition-all duration-200 border-slate-200 dark:border-slate-800">
+              <Card
+                key={service.title}
+                className="group hover:shadow-lg transition-all duration-200 border-slate-200 dark:border-slate-800"
+              >
                 <CardHeader>
                   <div className="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                     <service.icon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
@@ -110,14 +115,16 @@ export default function Home() {
                 Healthy Employees, Healthy Business
               </h2>
               <p className="text-gray-500 md:text-lg dark:text-gray-400">
-                We partner with organizations to provide comprehensive wellness programs, health checks, and emergency care for employees. Reduce claims and boost productivity with RaphaCure.
+                We partner with organizations to provide comprehensive wellness
+                programs, health checks, and emergency care for employees.
+                Reduce claims and boost productivity with RaphaCure.
               </p>
               <ul className="space-y-2">
                 {[
                   "On-site Health Checks",
                   "Mental Wellness Programs",
                   "24/7 Doctor Access",
-                  "Emergency Ambulance Support"
+                  "Emergency Ambulance Support",
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-green-500" />
@@ -125,13 +132,11 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <Button className="mt-4">
-                Learn More
-              </Button>
+              <Button className="mt-4">Learn More</Button>
             </div>
             <div className="relative aspect-video rounded-xl overflow-hidden shadow-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
-               {/* Placeholder for an image */}
-               <Building2 className="h-24 w-24 text-slate-400" />
+              {/* Placeholder for an image */}
+              <Building2 className="h-24 w-24 text-slate-400" />
             </div>
           </div>
         </div>
@@ -144,15 +149,23 @@ export default function Home() {
             Ready to prioritize your health?
           </h2>
           <p className="text-purple-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied users who trust RaphaCure for their medical needs.
-            Download our app or book online today.
+            Join thousands of satisfied users who trust RaphaCure for their
+            medical needs. Download our app or book online today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-purple-600 hover:bg-gray-100">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="bg-white text-purple-600 hover:bg-gray-100"
+            >
               <Phone className="mr-2 h-4 w-4" />
               Call 24/7 Helpline
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white/10"
+            >
               <Calendar className="mr-2 h-4 w-4" />
               Book Appointment
             </Button>

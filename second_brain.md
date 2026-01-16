@@ -1,9 +1,11 @@
 # Second Brain: RaphaCure Customer Portal
 
 ## 🎯 Current Focus
-- Implementing the homepage with a design inspired by `raphacure.com`.
+- Implementing deep linking fallback and mobile app promotion.
 
 ## ✅ Project Checklist
+- [x] Create catch-all route `app/[...slug]/page.tsx` for deep link fallback.
+- [x] Design "Open in App" page with Android/iOS download buttons.
 - [x] Install `shadcn/ui` components: `Button`, `Card`, `Input`, `Separator`.
 - [x] Implement `app/page.tsx` with Hero, Services, and Corporate Wellness sections.
 - [x] Update `app/layout.tsx` metadata and styles.
@@ -12,7 +14,7 @@
 - [x] Configure `next.config.ts` to serve `apple-app-site-association` as `application/json`.
 
 ## 📝 To-Do List (Next Actions)
-- [ ] Implement actual navigation and routing.
+- [ ] Implement actual navigation and routing for web users who want to use the portal.
 - [ ] Create detailed service pages.
 - [ ] Connect to backend for real data.
 
@@ -20,7 +22,6 @@
 - None currently.
 
 ## 🏛️ Architectural Decisions
-- Used `shadcn/ui` for UI components.
-- Used `lucide-react` for icons.
-- Used Tailwind CSS for styling and responsiveness.
-- Implemented `app/page.tsx` as a Server Component (default).
+- **Deep Link Fallback**: Implemented a catch-all route (`[...slug]`) to intercept all non-root traffic. This page prompts users to open the mobile app, assuming most "deep links" are intended for mobile consumption.
+- **Mobile First**: The fallback page is designed mobile-first with clear CTA buttons for app stores.
+- **UI Stack**: Continued use of `shadcn/ui` and Tailwind CSS.
